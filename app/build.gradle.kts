@@ -20,7 +20,12 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            buildConfigField("String", "BASE_URL", "\"https://hn.algolia.com")
+        }
+
         getByName("release") {
+            buildConfigField("String", "BASE_URL", "\"https://hn.algolia.com")
             isMinifyEnabled = false
             proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
