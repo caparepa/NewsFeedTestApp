@@ -61,6 +61,7 @@ dependencies {
     val retrofit_version by extra("2.9.0")
     val okhttp_version by extra("4.5.0")
     val room_version by extra("2.3.0")
+    val threetenabp_version by extra("1.2.4")
 
     //OKHTTP
     implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
@@ -82,4 +83,7 @@ dependencies {
     //room
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
+
+    //threeten
+    implementation("com.jakewharton.threetenabp:threetenabp:$threetenabp_version")
 }
