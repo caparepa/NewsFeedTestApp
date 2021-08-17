@@ -7,4 +7,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "NewsFeedTestApp"
-include ':app'
+include(":app")
