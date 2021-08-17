@@ -6,25 +6,25 @@ data class Hit(
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("title")
-    val title: Any?,
+    val title: String?,
     @SerializedName("url")
-    val url: Any?,
+    val url: String?,
     @SerializedName("author")
     val author: String?,
     @SerializedName("points")
-    val points: Any?,
+    val points: Int?,
     @SerializedName("story_text")
-    val storyText: Any?,
+    val storyText: String?,
     @SerializedName("comment_text")
     val commentText: String?,
     @SerializedName("num_comments")
-    val numComments: Any?,
+    val numComments: Int?,
     @SerializedName("story_id")
-    val storyId: Any?,
+    val storyId: Int?,
     @SerializedName("story_title")
-    val storyTitle: Any?,
+    val storyTitle: String?,
     @SerializedName("story_url")
-    val storyUrl: Any?,
+    val storyUrl: String?,
     @SerializedName("parent_id")
     val parentId: Int?,
     @SerializedName("created_at_i")
