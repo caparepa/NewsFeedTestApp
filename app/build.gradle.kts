@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.newsfeedtestapp"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         getByName("debug") {
-            buildConfigField("String", "BASE_URL", "\"https://hn.algolia.com")
+            buildConfigField("String", "BASE_URL", "\"https://hn.algolia.com\"")
         }
 
         getByName("release") {

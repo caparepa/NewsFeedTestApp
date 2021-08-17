@@ -1,4 +1,6 @@
 package com.example.newsfeedtestapp.network.interceptor
 
-interface RequestInterceptor {
+import okhttp3.Interceptor
+
+interface RequestInterceptor: Interceptor {
 }
