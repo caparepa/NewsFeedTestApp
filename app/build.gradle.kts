@@ -49,8 +49,14 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+
+    //coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
+
+    //livedat / lifecycle
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
 }
 
@@ -65,33 +71,33 @@ dependencies {
     //Third-party dependencies
 
     //Version define
-    val koin_version by extra("3.1.0")
-    val retrofit_version by extra("2.9.0")
-    val okhttp_version by extra("4.5.0")
-    val room_version by extra("2.3.0")
-    val threetenabp_version by extra("1.2.4")
+    val koinVersion by extra("3.1.0")
+    val retrofitVersion by extra("2.9.0")
+    val okhttpVersion by extra("4.5.0")
+    val roomVersion by extra("2.3.0")
+    val threetenabpVersion by extra("1.2.4")
 
     //OKHTTP
-    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_version")
+    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
     implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
 
     //Dependency injection
     // Koin for Kotlin apps core
-    implementation("io.insert-koin:koin-core:$koin_version")
-    testImplementation("io.insert-koin:koin-test:$koin_version")
+    implementation("io.insert-koin:koin-core:$koinVersion")
+    testImplementation("io.insert-koin:koin-test:$koinVersion")
 
     // Koin for android
-    implementation("io.insert-koin:koin-android:$koin_version")
+    implementation("io.insert-koin:koin-android:$koinVersion")
 
     //room
-    implementation("androidx.room:room-ktx:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
     //threeten
-    implementation("com.jakewharton.threetenabp:threetenabp:$threetenabp_version")
+    implementation("com.jakewharton.threetenabp:threetenabp:$threetenabpVersion")
 }
