@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -321,4 +322,49 @@ fun String.getDateOffsetDays(offset: Long, isAdd: Boolean): String {
 
 fun getDateTimeDiff(unit: ChronoUnit, now: LocalDateTime?, date: LocalDateTime?): Long {
     return unit.between(now, date)
+}
+
+/**
+ * View extensions
+ */
+fun View.isVisible() = visibility == View.VISIBLE
+
+fun View.isViewGone() = visibility == View.GONE
+
+fun View.makeVisibleAlpha(duration: Long, endAction: () -> Unit = {}) {
+    if (!isVisible()) makeVisible()
+    if (alpha != 0f) alpha = 0f
+    animate().alpha(1f).setDuration(duration).setInterpolator(AccelerateInterpolator())
+        .withEndAction {
+            endAction.invoke()
+        }
+}
+
+fun View.makeInvisibleAlpha(duration: Long, endAction: () -> Unit = {}) {
+    animate().alpha(0f).setDuration(duration).setInterpolator(AccelerateInterpolator())
+        .withEndAction {
+            endAction.invoke()
+        }
+}
+
+fun View.makeGoneAlpha(duration: Long, endAction: () -> Unit = {}) {
+    animate().alpha(0f).setDuration(duration).setInterpolator(AccelerateInterpolator())
+        .withEndAction {
+            endAction.invoke()
+            makeGone()
+        }
+}
+
+fun View.animateAlpha(duration: Long, value: Float, endAction: () -> Unit = {}) =
+    animate().alpha(value).setDuration(duration).setInterpolator(AccelerateInterpolator())
+        .withEndAction {
+            endAction.invoke()
+        }
+
+fun View.makeVisible() {
+    visibility = View.VISIBLE
+}
+
+fun View.makeGone() {
+    visibility = View.GONE
 }

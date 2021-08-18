@@ -33,6 +33,11 @@ android {
             )
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -104,4 +109,7 @@ dependencies {
 
     //threeten
     implementation("com.jakewharton.threetenabp:threetenabp:$threetenabpVersion")
+
+    //spinkit
+    implementation("com.github.ybq:Android-SpinKit:1.4.0")
 }
