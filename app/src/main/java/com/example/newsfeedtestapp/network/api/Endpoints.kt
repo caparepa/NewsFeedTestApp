@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface Endpoints {
 
     @GET("/api/v1/search_by_date?query=mobile")
-    suspend fun getApiInfo(): Response<NewsFeedResponse?>
+    suspend fun getNewsFeed(): Response<NewsFeedResponse?>
 
 }
