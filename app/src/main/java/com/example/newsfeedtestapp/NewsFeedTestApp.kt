@@ -10,6 +10,7 @@ class NewsFeedTestApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        initKoin()
         CoreModule.init()
     }
 
