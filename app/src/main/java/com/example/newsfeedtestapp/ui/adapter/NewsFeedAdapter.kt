@@ -10,9 +10,13 @@ class NewsFeedAdapter(
     private val context: Context,
     private val newsList: List<Hit>?,
     private val onClick: (Hit) -> Unit = { _ -> }
-): RecyclerView.Adapter<NewsFeedAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<NewsFeedAdapter.ViewHolder>() {
 
-    inner class ViewHolder(listItemView: View): RecyclerView.ViewHolder(listItemView) {
+    inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
+
+        fun bind(hit: Hit, onClick: (Hit) -> Unit) {
+
+        }
 
     }
 
@@ -25,6 +29,6 @@ class NewsFeedAdapter(
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return newsList?.size ?: 0
     }
 }
