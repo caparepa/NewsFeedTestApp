@@ -5,30 +5,38 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.example.newsfeedtestapp.R
+import com.example.newsfeedtestapp.ui.viewmodel.NewsFeedViewModel
+import com.example.newsfeedtestapp.utils.toastLong
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import java.util.Objects.isNull
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+//private const val ARG_PARAM1 = "param1"
+//private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [NewsFeedFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NewsFeedFragment : Fragment() {
+class NewsFeedFragment : BaseFragment(), KoinComponent {
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-
+    //DI
+    private val newsFeedViewModel: NewsFeedViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            //param1 = it.getString(ARG_PARAM1)
+            //param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -36,8 +44,39 @@ class NewsFeedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Observe viewmodel
+        observeViewModel()
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_news_feed, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        runViewModel()
+    }
+
+    private fun runViewModel() {
+        newsFeedViewModel.getNewsFeedList()
+    }
+
+    private fun observeViewModel() = newsFeedViewModel.run {
+        loadingState.observe(viewLifecycleOwner, Observer {
+
+        })
+        newsList.observe(viewLifecycleOwner, Observer {
+            if(it.isNullOrEmpty()) {
+               //show toast? no news?
+            }
+            requireActivity().toastLong("LOAD!")
+            //TODO: init recyclerview and stuff
+        })
+        onError.observe(viewLifecycleOwner, Observer {
+            //TODO: show toast with error!
+        })
     }
 
     companion object {
@@ -54,8 +93,8 @@ class NewsFeedFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             NewsFeedFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    //putString(ARG_PARAM1, param1)
+                    //putString(ARG_PARAM2, param2)
                 }
             }
     }
