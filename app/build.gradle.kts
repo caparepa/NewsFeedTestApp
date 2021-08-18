@@ -68,7 +68,7 @@ dependencies {
 }
 
 dependencies {
-    //Third-party dependencies
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")//Third-party dependencies
 
     //Version define
     val koinVersion by extra("3.1.0")

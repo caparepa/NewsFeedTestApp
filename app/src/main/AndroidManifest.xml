@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsFeedTestApp">
         <activity
+            android:name=".ui.activity.WebViewActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
