@@ -14,7 +14,8 @@ class NewsFeedRepositoryImpl : NewsFeedRepository, KoinComponent {
         withContext(Dispatchers.IO) {
             val response = api.getNewsFeed()
             val hitList = response.body()?.hits
-            hitList
+            val filteredList = hitList.filterStories()
+            filteredList
         }
 
     override suspend fun fetchNewsFeedData(): List<Hit>? {
@@ -23,5 +24,12 @@ class NewsFeedRepositoryImpl : NewsFeedRepository, KoinComponent {
 
     override suspend fun persistNewsFeedData(hitLlist: List<Hit>?) {
         TODO("Not yet implemented")
+    }
+
+    /**
+     * Filter out comments from the actual articles
+     */
+    private fun List<Hit>?.filterStories(): List<Hit>? {
+        return this?.filter { it.storyId != null }
     }
 }
