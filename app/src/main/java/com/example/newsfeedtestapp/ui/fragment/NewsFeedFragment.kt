@@ -70,6 +70,7 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
         newsList.observe(viewLifecycleOwner, Observer {
             if(it.isNullOrEmpty()) {
                //show toast? no news?
+                requireActivity().toastLong("NO NEWS!!!")
             }
             requireActivity().toastLong("LOAD!")
             //TODO: init recyclerview and stuff
