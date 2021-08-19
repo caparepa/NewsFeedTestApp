@@ -6,6 +6,7 @@ import com.example.newsfeedtestapp.network.interceptor.ConnectivityInterceptor
 import com.example.newsfeedtestapp.network.interceptor.ConnectivityInterceptorImpl
 import com.example.newsfeedtestapp.repository.NewsFeedRepository
 import com.example.newsfeedtestapp.repository.NewsFeedRepositoryImpl
+import com.example.newsfeedtestapp.ui.custom.AppLoader
 import com.example.newsfeedtestapp.ui.viewmodel.NewsFeedViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -35,4 +36,8 @@ val databaseModule = module {
 
 val viewModelModule = module {
     viewModel { NewsFeedViewModel(get()) }
+}
+
+val utilsModule = module {
+    factory { (context: Context) -> AppLoader(context) }
 }

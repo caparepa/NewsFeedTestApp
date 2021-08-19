@@ -1,6 +1,5 @@
 package com.example.newsfeedtestapp.ui.fragment
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,12 +11,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsfeedtestapp.data.model.Hit
 import com.example.newsfeedtestapp.databinding.FragmentNewsFeedBinding
-import com.example.newsfeedtestapp.ui.activity.WebViewActivity
 import com.example.newsfeedtestapp.ui.adapter.NewsFeedAdapter
+import com.example.newsfeedtestapp.ui.custom.AppLoader
 import com.example.newsfeedtestapp.ui.viewmodel.NewsFeedViewModel
 import com.example.newsfeedtestapp.utils.toastLong
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +37,7 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
 
     //DI
     private val newsFeedViewModel: NewsFeedViewModel by inject()
+    private val appLoader: AppLoader by inject { parametersOf(requireActivity())}
 
     //binding
     private var binding: FragmentNewsFeedBinding? = null
@@ -66,7 +67,7 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
 
     override fun onResume() {
         super.onResume()
-        runViewModel()
+        loadNewsFeed()
     }
 
     override fun onDestroyView() {
@@ -74,25 +75,33 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
         binding = null
     }
 
-    private fun runViewModel() {
+    private fun loadNewsFeed() {
         newsFeedViewModel.getNewsFeedList()
     }
 
     private fun observeViewModel() = newsFeedViewModel.run {
         loadingState.observe(viewLifecycleOwner, Observer {
-
+            //TODO: fix AppLoader!!!
+            if(it) {
+                if(!binding?.swRefreshNewsFeed?.isRefreshing!!)
+                    appLoader.show(requireActivity())
+            } else {
+                appLoader.dismiss(requireActivity())
+            }
         })
         newsList.observe(viewLifecycleOwner, Observer {
             if (it.isNullOrEmpty()) {
                 //show toast? no news?
                 requireActivity().toastLong("NO NEWS!!!")
             } else {
+                binding?.swRefreshNewsFeed?.isRefreshing = false
                 requireActivity().toastLong("LOAD!")
                 val rvNewsList = binding?.rvNewsList
                 val adapter =
                     NewsFeedAdapter(requireActivity().applicationContext, it, onClick = onItemClick)
                 rvNewsList?.adapter = adapter
                 rvNewsList?.layoutManager = LinearLayoutManager(context)
+                binding?.swRefreshNewsFeed?.setOnRefreshListener { loadNewsFeed() }
             }
         })
         onError.observe(viewLifecycleOwner, Observer {
