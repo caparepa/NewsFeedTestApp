@@ -3,6 +3,7 @@ package com.example.newsfeedtestapp.ui.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.example.newsfeedtestapp.R
@@ -20,11 +21,12 @@ class WebViewActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-        webView = binding?.wvContent
-        webView?.webViewClient = WebViewClient()
 
         val url = intent?.extras?.getString("url","")
         val title = intent?.extras?.getString("title","")
+
+        webView = binding?.wvContent
+        webView?.webViewClient = WebViewClient()
 
         webView?.loadUrl(url!!)
 
