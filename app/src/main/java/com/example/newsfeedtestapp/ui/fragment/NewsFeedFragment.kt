@@ -95,6 +95,7 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
         })
         onError.observe(viewLifecycleOwner, Observer {
             //TODO: show toast with error!
+            requireActivity().toastLong(it)
         })
     }
 
