@@ -19,4 +19,16 @@ object GeneralTypeConverter {
         return result?.toJsonString()
     }
 
+    @TypeConverter
+    @JvmStatic
+    fun toString(id: Int): String {
+        return id.toString()
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toInt(id: String?): Int {
+        return id?.toInt()!!
+    }
+
 }

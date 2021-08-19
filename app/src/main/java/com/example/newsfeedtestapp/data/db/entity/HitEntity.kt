@@ -2,9 +2,12 @@ package com.example.newsfeedtestapp.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.newsfeedtestapp.data.model.HighlightResult
 
-@Entity(tableName = "hits")
+@Entity(
+    tableName = "hits"
+)
 data class HitEntity(
     @ColumnInfo(name = "created_at")
     val createdAt: String?,
@@ -22,6 +25,7 @@ data class HitEntity(
     val commentText: String?,
     @ColumnInfo(name = "num_comments")
     val numComments: Int?,
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "story_id")
     val storyId: Int?,
     @ColumnInfo(name = "story_title")
