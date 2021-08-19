@@ -101,10 +101,11 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
 
     private var onItemClick: (Hit) -> Unit = { hit ->
         val url = hit.url ?: hit.storyUrl
-        val programDetailIntent = Intent(requireActivity(), WebViewActivity::class.java)
-        programDetailIntent.putExtra("url", url)
-        requireActivity().toastLong("CLICK! ${url}")
-        startActivity(programDetailIntent)
+        val title = hit.title ?: hit.storyTitle
+        val hitDetailIntent = Intent(requireActivity(), WebViewActivity::class.java)
+        hitDetailIntent.putExtra("url", url)
+        hitDetailIntent.putExtra("title", title)
+        startActivity(hitDetailIntent)
     }
 
     companion object {
