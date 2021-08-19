@@ -11,6 +11,9 @@ interface HitDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(commandCode: HitEntity)
 
+    @Query("SELECT * FROM hits")
+    suspend fun fetchNewsHits(): List<HitEntity>
+
     @Query("SELECT * FROM hits WHERE story_id NOT IN (:storyIdList)")
-    suspend fun fetchNewsHits(storyIdList: List<Int>): List<HitEntity>
+    suspend fun fetchUnreadNewsHits(storyIdList: List<Int>): List<HitEntity>
 }

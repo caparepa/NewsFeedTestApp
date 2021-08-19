@@ -22,7 +22,7 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    factory<NewsFeedRepository> { NewsFeedRepositoryImpl() }
+    factory<NewsFeedRepository> { NewsFeedRepositoryImpl(get(), get()) }
 }
 
 val localModule = module {
