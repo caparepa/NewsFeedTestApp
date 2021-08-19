@@ -22,7 +22,7 @@ class NewsFeedRepositoryImpl : NewsFeedRepository, KoinComponent {
         TODO("Not yet implemented")
     }
 
-    override suspend fun persistNewsFeedData(hitLlist: List<Hit>?) {
+    override suspend fun persistNewsFeedData(hitList: List<Hit>?) {
         TODO("Not yet implemented")
     }
 
