@@ -1,11 +1,13 @@
 package com.example.newsfeedtestapp.ui.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsfeedtestapp.data.model.Hit
@@ -101,11 +103,9 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
 
     private var onItemClick: (Hit) -> Unit = { hit ->
         val url = hit.url ?: hit.storyUrl
-        val title = hit.title ?: hit.storyTitle
-        val hitDetailIntent = Intent(requireActivity(), WebViewActivity::class.java)
-        hitDetailIntent.putExtra("url", url)
-        hitDetailIntent.putExtra("title", title)
-        startActivity(hitDetailIntent)
+        val builder = CustomTabsIntent.Builder()
+        val customTabsIntent = builder.build()
+        customTabsIntent.launchUrl(requireActivity(), Uri.parse(url))
     }
 
     companion object {
