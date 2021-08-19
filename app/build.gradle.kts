@@ -112,4 +112,7 @@ dependencies {
 
     //spinkit
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
+
+    //chrome tabs
+    implementation("androidx.browser:browser:1.3.0")
 }
