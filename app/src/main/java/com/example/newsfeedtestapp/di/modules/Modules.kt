@@ -1,6 +1,9 @@
 package com.example.newsfeedtestapp.di.modules
 
 import android.content.Context
+import com.example.newsfeedtestapp.data.NewsFeedTestAppDatabase
+import com.example.newsfeedtestapp.data.db.dao.HitDao
+import com.example.newsfeedtestapp.data.db.dao.ReadHitDao
 import com.example.newsfeedtestapp.network.api.ApiClient
 import com.example.newsfeedtestapp.network.interceptor.ConnectivityInterceptor
 import com.example.newsfeedtestapp.network.interceptor.ConnectivityInterceptorImpl
@@ -31,6 +34,18 @@ val dataModule = module {
 }
 
 val databaseModule = module {
+    single { NewsFeedTestAppDatabase.invoke(androidContext()) }
+
+    fun provideHitDao(database: NewsFeedTestAppDatabase): HitDao {
+        return database.getHitDao()
+    }
+
+    fun provideReadHitDao(database: NewsFeedTestAppDatabase): ReadHitDao {
+        return database.getReadHitDao()
+    }
+
+    single { provideHitDao(get()) }
+    single { provideReadHitDao(get()) }
 
 }
 

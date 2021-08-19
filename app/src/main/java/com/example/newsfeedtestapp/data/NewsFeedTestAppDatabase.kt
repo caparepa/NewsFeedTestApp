@@ -1,19 +1,19 @@
 package com.example.newsfeedtestapp.data
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import com.example.newsfeedtestapp.data.db.dao.HitDao
 import com.example.newsfeedtestapp.data.db.dao.ReadHitDao
 import com.example.newsfeedtestapp.data.db.entity.HitEntity
 import com.example.newsfeedtestapp.data.db.entity.ReadHitEntity
+import com.example.newsfeedtestapp.utils.converter.GeneralTypeConverter
 
 @Database(
     entities = [HitEntity::class, ReadHitEntity::class],
     version = 1,
     exportSchema = false
 )
+@TypeConverters(GeneralTypeConverter::class)
 abstract class NewsFeedTestAppDatabase : RoomDatabase() {
 
     abstract fun getHitDao(): HitDao

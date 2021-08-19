@@ -8,7 +8,6 @@ import com.example.newsfeedtestapp.utils.toKotlinObject
 object GeneralTypeConverter {
 
     @TypeConverter
-    @JvmStatic
     fun toHighlightResult(result: String?): HighlightResult? {
         return result?.toKotlinObject()
     }
@@ -29,6 +28,18 @@ object GeneralTypeConverter {
     @JvmStatic
     fun toInt(id: String?): Int {
         return id?.toInt()!!
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromListString(list: List<String>?): String? {
+        return list.toString()
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toListString(list: String?): List<String>? {
+        return list?.toKotlinObject()
     }
 
 }
