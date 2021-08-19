@@ -1,17 +1,21 @@
 package com.example.newsfeedtestapp.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.example.newsfeedtestapp.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsfeedtestapp.data.model.Hit
+import com.example.newsfeedtestapp.databinding.FragmentNewsFeedBinding
+import com.example.newsfeedtestapp.ui.activity.WebViewActivity
+import com.example.newsfeedtestapp.ui.adapter.NewsFeedAdapter
 import com.example.newsfeedtestapp.ui.viewmodel.NewsFeedViewModel
 import com.example.newsfeedtestapp.utils.toastLong
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.Objects.isNull
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +36,9 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
     //DI
     private val newsFeedViewModel: NewsFeedViewModel by inject()
 
+    //binding
+    private var binding: FragmentNewsFeedBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,7 +54,8 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
         //Observe viewmodel
         observeViewModel()
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news_feed, container, false)
+        binding = FragmentNewsFeedBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,6 +67,11 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
         runViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     private fun runViewModel() {
         newsFeedViewModel.getNewsFeedList()
     }
@@ -68,16 +81,29 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
 
         })
         newsList.observe(viewLifecycleOwner, Observer {
-            if(it.isNullOrEmpty()) {
-               //show toast? no news?
+            if (it.isNullOrEmpty()) {
+                //show toast? no news?
                 requireActivity().toastLong("NO NEWS!!!")
+            } else {
+                requireActivity().toastLong("LOAD!")
+                val rvNewsList = binding?.rvNewsList
+                val adapter =
+                    NewsFeedAdapter(requireActivity().applicationContext, it, onClick = onItemClick)
+                rvNewsList?.adapter = adapter
+                rvNewsList?.layoutManager = LinearLayoutManager(context)
             }
-            requireActivity().toastLong("LOAD!")
-            //TODO: init recyclerview and stuff
         })
         onError.observe(viewLifecycleOwner, Observer {
             //TODO: show toast with error!
         })
+    }
+
+    private var onItemClick: (Hit) -> Unit = { hit ->
+        val url = hit.url ?: hit.storyUrl
+        val programDetailIntent = Intent(requireActivity(), WebViewActivity::class.java)
+        programDetailIntent.putExtra("url", url)
+        requireActivity().toastLong("CLICK! ${url}")
+        startActivity(programDetailIntent)
     }
 
     companion object {

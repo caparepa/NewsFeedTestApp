@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class NewsFeedViewModel(context: Context): BaseViewModel(), KoinComponent {
+class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
 
     private val newsFeedRepository: NewsFeedRepository by inject()
 
