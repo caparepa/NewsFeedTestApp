@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.newsfeedtestapp.data.model.Hit
 import com.example.newsfeedtestapp.repository.NewsFeedRepository
+import com.example.newsfeedtestapp.utils.NoConnectivityException
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -22,7 +23,9 @@ class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
     }
 
     fun fetchNewsFeedList() {
-
+        viewModelScope.launch {
+            fetchNewsFeedListAsync()
+        }
     }
 
     private suspend fun getNewsFeedListAsync() {
@@ -36,13 +39,30 @@ class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
                 newsList.postValue(it)
             }
             onFailure {
-                onError.postValue(it.message)
+                val message = it.message
+                onError.postValue(message)
+                if(it is NoConnectivityException) {
+                    onConnError.postValue(message)
+                }
             }
         }
     }
 
     private suspend fun fetchNewsFeedListAsync() {
-
+        val result = kotlin.runCatching {
+            showLoading()
+            newsFeedRepository.fetchNewsFeedData()
+        }
+        with(result) {
+            dismissLoading()
+            onSuccess {
+                newsList.postValue(it)
+            }
+            onFailure {
+                val message = it.message
+                onError.postValue(message)
+            }
+        }
     }
 
 }

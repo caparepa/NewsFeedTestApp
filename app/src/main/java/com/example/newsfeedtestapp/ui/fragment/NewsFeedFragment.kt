@@ -108,6 +108,12 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
             //TODO: show toast with error!
             requireActivity().toastLong(it)
         })
+        onConnError.observe(viewLifecycleOwner, Observer {
+            if(it != null) {
+                //If it is not null, it means there's no internet, thus the data must be fetched from DB
+                newsFeedViewModel.fetchNewsFeedList()
+            }
+        })
     }
 
     private var onItemClick: (Hit) -> Unit = { hit ->

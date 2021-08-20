@@ -9,6 +9,7 @@ open class BaseViewModel : ViewModel() {
     val loadingState = MutableLiveData<Boolean>()
     val onSuccess = MutableLiveData<Any>()
     val onError = MutableLiveData<String>()
+    val onConnError = MutableLiveData<String>()
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
