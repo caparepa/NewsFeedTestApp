@@ -36,8 +36,9 @@ The package structure is the following, explained in a short, concise way:
 * ui: contains all things related to user interfaces (activities, fragments, adapters, viewmodels, etc)
 * utils: nice-to-have utility package with classes and extensions.
 
-### Known issues or bugs
+### Known issues/bugs, and other information of interest
 
+* The data received from the API encompasses both articles and comments. I decided to filter out comments and keep only the root articles in order to have a smooth development process. You can see the validation in the extension List<Hit>?.filterStories() (NewsFeedRepositoryImpl.kt).
 * The WebView activity was replaced with a Chrome Custom Tabs intent, since the URL wouldn't load into the WebView element due some security issue.
 * When swiping to delete an item, the RecyclerView might not update correctly and refresh the view.
 * The initial loading element might cause artifacts when starting the app (there's no splash screen)
