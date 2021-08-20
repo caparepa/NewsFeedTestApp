@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "read_hits",
     indices =
     [Index(
-        value = ["story_id"],
+        value = ["story_url"],
         unique = true
     )]
 )
@@ -17,6 +17,6 @@ data class ReadHitEntity(
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     val id: Long?,
-    @ColumnInfo(name = "story_id")
-    val storyId: Int?
+    @ColumnInfo(name = "story_url")
+    val storyUrl: String
 )

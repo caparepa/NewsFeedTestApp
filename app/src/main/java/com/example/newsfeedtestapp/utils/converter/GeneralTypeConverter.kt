@@ -30,4 +30,16 @@ object GeneralTypeConverter {
         return list.toKotlinObject()
     }
 
+    @TypeConverter
+    @JvmStatic
+    fun fromString(objectId: String): Int {
+        return objectId.toInt()
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toString(objectId: Int): String {
+        return objectId.toString()
+    }
+
 }

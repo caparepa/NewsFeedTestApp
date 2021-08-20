@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName
     tableName = "hits",
     indices =
     [Index(
-        value = ["story_id"],
+        value = ["story_url"],
         unique = true
     )]
 )
@@ -38,7 +38,7 @@ data class HitEntity(
     @ColumnInfo(name = "story_title")
     val storyTitle: String?,
     @ColumnInfo(name = "story_url")
-    val storyUrl: String?,
+    val storyUrl: String,
     @ColumnInfo(name = "parent_id")
     val parentId: Int?,
     @ColumnInfo(name = "created_at_i")

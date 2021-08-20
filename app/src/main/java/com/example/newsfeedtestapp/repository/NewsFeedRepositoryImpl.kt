@@ -6,7 +6,6 @@ import com.example.newsfeedtestapp.data.db.entity.HitEntity
 import com.example.newsfeedtestapp.data.db.entity.ReadHitEntity
 import com.example.newsfeedtestapp.data.model.Hit
 import com.example.newsfeedtestapp.network.api.ApiClient
-import com.example.newsfeedtestapp.utils.mapTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -33,7 +32,7 @@ class NewsFeedRepositoryImpl(
         val hitList = if(readList.isEmpty()) {
             hitDao.fetchNewsHits()
         }else {
-            hitDao.fetchUnreadNewsHits(readList.getIdList())
+            hitDao.fetchUnreadNewsHits(readList.getUrlList())
         }
         hitList.forEach { hit ->
             val model = Hit(
@@ -72,7 +71,7 @@ class NewsFeedRepositoryImpl(
                 numComments = hit.numComments,
                 storyId = hit.storyId,
                 storyTitle = hit.storyTitle,
-                storyUrl = hit.storyUrl,
+                storyUrl = hit.storyUrl ?: "",
                 parentId = hit.parentId,
                 createdAtI = hit.createdAtI,
                 tags = hit.tags,
@@ -87,18 +86,18 @@ class NewsFeedRepositoryImpl(
      * Filter out comments from the actual articles
      */
     private fun List<Hit>?.filterStories(): List<Hit>? {
-        return this?.filter { it.storyId != null }
+        return this?.filter { !it.storyUrl.isNullOrEmpty() }
     }
 
-    private fun List<ReadHitEntity>?.getIdList(): List<Int> {
+    private fun List<ReadHitEntity>?.getUrlList(): List<String> {
 
-        var result = arrayListOf<Int>()
+        var result = arrayListOf<String>()
 
         if(this.isNullOrEmpty())
             return result
 
         this.forEach { read ->
-            result.add(read.storyId!!)
+            result.add(read.storyUrl)
         }
 
         return result
