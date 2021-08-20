@@ -11,11 +11,21 @@ import com.example.newsfeedtestapp.R
 import com.example.newsfeedtestapp.data.model.Hit
 import com.example.newsfeedtestapp.utils.setOneOffClickListener
 
+/**
+ * ItemTouchHelperAdapter events adapted from: https://github.com/SG-K/RecyclerviewWithBenefits
+ */
 class NewsFeedAdapter(
     private val context: Context,
-    private val newsList: List<Hit>,
-    private val onClick: (Hit) -> Unit = { _ -> }
-) : RecyclerView.Adapter<NewsFeedAdapter.ViewHolder>() {
+    private val onClick: (Hit) -> Unit = { _ -> },
+    private val onSwiped: (Hit) -> Unit = { _ -> }
+) : RecyclerView.Adapter<NewsFeedAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+
+    var newsList : ArrayList<Hit> = ArrayList()
+
+    fun setData(array : ArrayList<Hit>){
+        newsList = array
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
 
@@ -56,5 +66,22 @@ class NewsFeedAdapter(
 
     override fun getItemCount(): Int {
         return newsList.size
+    }
+
+    /**
+     * For swiping actions
+     */
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        return false
+    }
+
+    override fun onItemDismiss(position: Int) {
+        //Dismiss the item from the recyclew view and the loaded list
+        val hit: Hit = newsList.get(position)
+        newsList.removeAt(position)
+        notifyItemRemoved(position)
+        //Invoke the callback
+        onSwiped.invoke(hit)
     }
 }

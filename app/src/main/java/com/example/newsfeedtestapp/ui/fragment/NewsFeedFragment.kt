@@ -2,16 +2,19 @@ package com.example.newsfeedtestapp.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsfeedtestapp.data.model.Hit
 import com.example.newsfeedtestapp.databinding.FragmentNewsFeedBinding
 import com.example.newsfeedtestapp.ui.adapter.NewsFeedAdapter
+import com.example.newsfeedtestapp.ui.adapter.SwipeHelperCallback
 import com.example.newsfeedtestapp.ui.custom.AppLoader
 import com.example.newsfeedtestapp.ui.viewmodel.NewsFeedViewModel
 import com.example.newsfeedtestapp.utils.toastLong
@@ -37,10 +40,14 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
 
     //DI
     private val newsFeedViewModel: NewsFeedViewModel by inject()
-    private val appLoader: AppLoader by inject { parametersOf(requireActivity())}
+    private val appLoader: AppLoader by inject { parametersOf(requireActivity()) }
 
     //binding
     private var binding: FragmentNewsFeedBinding? = null
+
+    //adapter callback
+    lateinit var newsFeedAdapter: NewsFeedAdapter
+    private var mItemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,8 +89,8 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
     private fun observeViewModel() = newsFeedViewModel.run {
         loadingState.observe(viewLifecycleOwner, Observer {
             //TODO: fix AppLoader!!!
-            if(it) {
-                if(!binding?.swRefreshNewsFeed?.isRefreshing!!)
+            if (it) {
+                if (!binding?.swRefreshNewsFeed?.isRefreshing!!)
                     appLoader.show(requireActivity())
             } else {
                 appLoader.dismiss(requireActivity())
@@ -94,33 +101,71 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
                 //show toast? no news?
                 requireActivity().toastLong("NO NEWS!!!")
             } else {
+                //dismiss refresh layout loader
                 binding?.swRefreshNewsFeed?.isRefreshing = false
-                requireActivity().toastLong("LOAD!")
-                val rvNewsList = binding?.rvNewsList
-                val adapter =
-                    NewsFeedAdapter(requireActivity().applicationContext, it, onClick = onItemClick)
-                rvNewsList?.adapter = adapter
-                rvNewsList?.layoutManager = LinearLayoutManager(context)
+
+                setUpNewsFeedAdapter()
+
+                //initialize adapter data
+                if (::newsFeedAdapter.isInitialized) {
+                    newsFeedAdapter.setData(ArrayList(it))
+                }
+
+                //set up the refresh layout
                 binding?.swRefreshNewsFeed?.setOnRefreshListener { loadNewsFeed() }
+
             }
+        })
+        itemDeleted.observe(viewLifecycleOwner, Observer {
+            requireActivity().toastLong(it)
         })
         onError.observe(viewLifecycleOwner, Observer {
             //TODO: show toast with error!
             requireActivity().toastLong(it)
         })
         onConnError.observe(viewLifecycleOwner, Observer {
-            if(it != null) {
+            if (it != null) {
                 //If it is not null, it means there's no internet, thus the data must be fetched from DB
                 newsFeedViewModel.fetchNewsFeedList()
             }
         })
     }
 
+    private fun NewsFeedViewModel.setUpNewsFeedAdapter() {
+        //get recyclerview
+        val rvNewsList = binding?.rvNewsList
+
+        //Set up the adapter
+        //Callback for onSwipe event is a placeholder, the actual swipe event takes place
+        //in the SwipeHelperCallback
+        newsFeedAdapter =
+            NewsFeedAdapter(
+                requireActivity().applicationContext,
+                onClick = onItemClick,
+                onSwiped = onSwipe
+            )
+
+        //set up adapter (cont'd)
+        rvNewsList?.adapter = newsFeedAdapter
+        rvNewsList?.layoutManager = LinearLayoutManager(context)
+
+        //set up callback for swipe event
+        val callback: ItemTouchHelper.Callback = SwipeHelperCallback(newsFeedAdapter)
+        mItemTouchHelper = ItemTouchHelper(callback)
+        mItemTouchHelper?.attachToRecyclerView(rvNewsList)
+    }
+
+    //Callback for onClick event
     private var onItemClick: (Hit) -> Unit = { hit ->
         val url = hit.url ?: hit.storyUrl
         val builder = CustomTabsIntent.Builder()
         val customTabsIntent = builder.build()
         customTabsIntent.launchUrl(requireActivity(), Uri.parse(url))
+    }
+
+    //Callback for onSwipe event (remove the item from the recycler view AND deleting the entry from DB)
+    private var onSwipe: (Hit) -> Unit = { hit ->
+        newsFeedViewModel.deleteEntryFromNewsFeed(hit)
     }
 
     companion object {

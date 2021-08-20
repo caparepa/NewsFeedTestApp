@@ -26,7 +26,7 @@ class NewsFeedRepositoryImpl(
             filteredList
         }
 
-    override suspend fun fetchNewsFeedData(): List<Hit>? {
+    override suspend fun fetchNewsFeedData(): List<Hit> {
         var result = arrayListOf<Hit>()
         val readList = readHitDao.fetchReadHits()
         val hitList = if(readList.isEmpty()) {
@@ -83,7 +83,15 @@ class NewsFeedRepositoryImpl(
     }
 
     /**
+     * NOTE: all entries in the database are actual articles, that's why story_url is never null
+     */
+    override suspend fun deleteEntryFromNewsFeed(hit: Hit) {
+        hitDao.delete(hit.storyUrl!!)
+    }
+
+    /**
      * Filter out comments from the actual articles
+     * If story_url is null, it means it's a comment and not an article
      */
     private fun List<Hit>?.filterStories(): List<Hit>? {
         return this?.filter { !it.storyUrl.isNullOrEmpty() }

@@ -16,6 +16,7 @@ class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
     private val newsFeedRepository: NewsFeedRepository by inject()
 
     val newsList = MutableLiveData<List<Hit>?>()
+    val itemDeleted = MutableLiveData<String>()
 
     fun getNewsFeedList() {
         viewModelScope.launch {
@@ -26,6 +27,12 @@ class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
     fun fetchNewsFeedList() {
         viewModelScope.launch {
             fetchNewsFeedListAsync()
+        }
+    }
+
+    fun deleteEntryFromNewsFeed(hit: Hit) {
+        viewModelScope.launch {
+            deleteEntryFromNewsFeedAsync(hit)
         }
     }
 
@@ -67,6 +74,20 @@ class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
             onFailure {
                 val message = it.message
                 onError.postValue(message)
+            }
+        }
+    }
+
+    private suspend fun deleteEntryFromNewsFeedAsync(hit: Hit) {
+        val result = kotlin.runCatching {
+            newsFeedRepository.deleteEntryFromNewsFeed(hit)
+        }
+        with(result) {
+            onSuccess {
+                itemDeleted.postValue("Item deleted successfully")
+            }
+            onFailure {
+                onError.postValue("Couldn't delete entry: ${it.message}")
             }
         }
     }

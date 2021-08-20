@@ -11,6 +11,9 @@ interface HitDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(readHit: HitEntity)
 
+    @Query("DELETE FROM hits WHERE story_url = :storyUrl")
+    suspend fun delete(storyUrl: String)
+
     @Transaction
     suspend fun upsert(readHit: HitEntity) {
         val id: Long = insert(readHit)
