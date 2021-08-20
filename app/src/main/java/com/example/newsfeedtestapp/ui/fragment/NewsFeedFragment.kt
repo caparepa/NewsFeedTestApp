@@ -98,8 +98,9 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
         })
         newsList.observe(viewLifecycleOwner, Observer {
             if (it.isNullOrEmpty()) {
-                //show toast? no news?
-                requireActivity().toastLong("NO NEWS!!!")
+                requireActivity().toastLong("There's no data available from host." +
+                        "Will try to load from local storage.")
+                this.fetchNewsFeedList()
             } else {
                 //dismiss refresh layout loader
                 binding?.swRefreshNewsFeed?.isRefreshing = false
@@ -120,7 +121,6 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
 
         })
         onError.observe(viewLifecycleOwner, Observer {
-            //TODO: show toast with error!
             requireActivity().toastLong(it)
         })
         onConnError.observe(viewLifecycleOwner, Observer {

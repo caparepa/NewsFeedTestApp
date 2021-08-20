@@ -1,6 +1,7 @@
 package com.example.newsfeedtestapp.ui.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.newsfeedtestapp.data.model.Hit
@@ -48,14 +49,16 @@ class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
             }
             onFailure {
                 val message = it.message
-                onError.postValue(message)
                 when (it) {
                     is NoConnectivityException -> {
-                        onConnError.postValue(message)
+                        onConnError.postValue("No internet connection. " +
+                                "Will try to load data from local storage.")
                     }
                     is UnknownHostException -> {
-                        onConnError.postValue(message)
+                        onConnError.postValue("Host not responding. " +
+                                "Will try to load data from local storage.")
                     }
+                    else -> { onError.postValue(message) }
                 }
             }
         }
