@@ -1,15 +1,23 @@
 package com.example.newsfeedtestapp.data.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.newsfeedtestapp.data.db.entity.HitEntity
 
 @Dao
 interface HitDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(readHit: HitEntity): Long
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(commandCode: HitEntity)
+    suspend fun update(readHit: HitEntity)
+
+    @Transaction
+    suspend fun upsert(readHit: HitEntity) {
+        val id: Long = insert(readHit)
+        if (id == -1L) {
+            update(readHit)
+        }
+    }
 
     @Query("SELECT * FROM hits")
     suspend fun fetchNewsHits(): List<HitEntity>

@@ -20,26 +20,14 @@ object GeneralTypeConverter {
 
     @TypeConverter
     @JvmStatic
-    fun toString(id: Int): String {
-        return id.toString()
-    }
-
-    @TypeConverter
-    @JvmStatic
-    fun toInt(id: String?): Int {
-        return id?.toInt()!!
-    }
-
-    @TypeConverter
-    @JvmStatic
-    fun fromListString(list: List<String>?): String? {
+    fun fromListString(list: List<String>?): String {
         return list.toString()
     }
 
     @TypeConverter
     @JvmStatic
-    fun toListString(list: String?): List<String>? {
-        return list?.toKotlinObject()
+    fun toListString(list: String): List<String> {
+        return list.toKotlinObject()
     }
 
 }

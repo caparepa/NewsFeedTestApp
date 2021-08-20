@@ -23,6 +23,7 @@ class NewsFeedRepositoryImpl(
             val response = api.getNewsFeed()
             val hitList = response.body()?.hits
             val filteredList = hitList.filterStories()
+            persistNewsFeedData(filteredList)
             filteredList
         }
 
@@ -44,8 +45,27 @@ class NewsFeedRepositoryImpl(
     }
 
     override suspend fun persistNewsFeedData(hitList: List<Hit>?) {
-        val entityList = hitList?.mapTo(HitEntity::class.java)
-
+        hitList?.forEach { hit ->
+            val entity = HitEntity(
+                hit.createdAt,
+                hit.title,
+                hit.url,
+                hit.author,
+                hit.points,
+                hit.storyText,
+                hit.commentText,
+                hit.numComments,
+                hit.storyId,
+                hit.storyTitle,
+                hit.storyUrl,
+                hit.parentId,
+                hit.createdAtI,
+                hit.tags,
+                hit.objectID,
+                hit.highlightResult
+            )
+            hitDao.upsert(entity)
+        }
     }
 
     /**
