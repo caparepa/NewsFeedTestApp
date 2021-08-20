@@ -30,16 +30,31 @@ class NewsFeedRepositoryImpl(
     override suspend fun fetchNewsFeedData(): List<Hit>? {
         var result = arrayListOf<Hit>()
         val readList = readHitDao.fetchReadHits()
-        if(readList.isEmpty()) {
-            val hitList = hitDao.fetchNewsHits()
-            hitList.forEach { hit ->
-                result.add(hit.mapTo(Hit::class.java)!!)
-            }
+        val hitList = if(readList.isEmpty()) {
+            hitDao.fetchNewsHits()
         }else {
-            val hitList = hitDao.fetchUnreadNewsHits(readList.getIdList())
-            hitList.forEach { hit ->
-                result.add(hit.mapTo(Hit::class.java)!!)
-            }
+            hitDao.fetchUnreadNewsHits(readList.getIdList())
+        }
+        hitList.forEach { hit ->
+            val model = Hit(
+                createdAt = hit.createdAt,
+                title = hit.title,
+                url = hit.url,
+                author = hit.author,
+                points = hit.points,
+                storyText = hit.storyText,
+                commentText = hit.commentText,
+                numComments = hit.numComments,
+                storyId = hit.storyId,
+                storyTitle = hit.storyTitle,
+                storyUrl = hit.storyUrl,
+                parentId = hit.parentId,
+                createdAtI = hit.createdAtI,
+                tags = hit.tags,
+                objectID = hit.objectID,
+                highlightResult = hit.highlightResult
+            )
+            result.add(model)
         }
         return result
     }
@@ -47,22 +62,22 @@ class NewsFeedRepositoryImpl(
     override suspend fun persistNewsFeedData(hitList: List<Hit>?) {
         hitList?.forEach { hit ->
             val entity = HitEntity(
-                hit.createdAt,
-                hit.title,
-                hit.url,
-                hit.author,
-                hit.points,
-                hit.storyText,
-                hit.commentText,
-                hit.numComments,
-                hit.storyId,
-                hit.storyTitle,
-                hit.storyUrl,
-                hit.parentId,
-                hit.createdAtI,
-                hit.tags,
-                hit.objectID,
-                hit.highlightResult
+                createdAt = hit.createdAt,
+                title = hit.title,
+                url = hit.url,
+                author = hit.author,
+                points = hit.points,
+                storyText = hit.storyText,
+                commentText = hit.commentText,
+                numComments = hit.numComments,
+                storyId = hit.storyId,
+                storyTitle = hit.storyTitle,
+                storyUrl = hit.storyUrl,
+                parentId = hit.parentId,
+                createdAtI = hit.createdAtI,
+                tags = hit.tags,
+                objectID = hit.objectID,
+                highlightResult = hit.highlightResult
             )
             hitDao.upsert(entity)
         }

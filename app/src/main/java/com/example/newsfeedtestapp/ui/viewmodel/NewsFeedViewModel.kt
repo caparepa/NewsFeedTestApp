@@ -9,6 +9,7 @@ import com.example.newsfeedtestapp.utils.NoConnectivityException
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.net.UnknownHostException
 
 class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
 
@@ -41,8 +42,13 @@ class NewsFeedViewModel(val context: Context): BaseViewModel(), KoinComponent {
             onFailure {
                 val message = it.message
                 onError.postValue(message)
-                if(it is NoConnectivityException) {
-                    onConnError.postValue(message)
+                when (it) {
+                    is NoConnectivityException -> {
+                        onConnError.postValue(message)
+                    }
+                    is UnknownHostException -> {
+                        onConnError.postValue(message)
+                    }
                 }
             }
         }
