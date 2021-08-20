@@ -7,4 +7,5 @@ interface NewsFeedRepository {
     suspend fun fetchNewsFeedData(): List<Hit>?
     suspend fun persistNewsFeedData(hitList: List<Hit>?)
     suspend fun deleteEntryFromNewsFeed(hit: Hit)
+    suspend fun persistReadHit(hit: Hit)
 }

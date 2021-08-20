@@ -87,6 +87,14 @@ class NewsFeedRepositoryImpl(
      */
     override suspend fun deleteEntryFromNewsFeed(hit: Hit) {
         hitDao.delete(hit.storyUrl!!)
+        persistReadHit(hit)
+    }
+
+    override suspend fun persistReadHit(hit: Hit) {
+        val entity = ReadHitEntity(
+            hit.storyUrl!!
+        )
+        readHitDao.upsert(entity)
     }
 
     /**

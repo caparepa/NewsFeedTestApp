@@ -14,9 +14,10 @@ import androidx.room.PrimaryKey
     )]
 )
 data class ReadHitEntity(
-    @ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = true)
-    val id: Long?,
     @ColumnInfo(name = "story_url")
     val storyUrl: String
-)
+) {
+    @ColumnInfo(name = "id")
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+}

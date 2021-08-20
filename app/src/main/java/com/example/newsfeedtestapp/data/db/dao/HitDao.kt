@@ -25,6 +25,6 @@ interface HitDao {
     @Query("SELECT * FROM hits")
     suspend fun fetchNewsHits(): List<HitEntity>
 
-    @Query("SELECT * FROM hits WHERE story_url NOT IN (:storyIdList)")
-    suspend fun fetchUnreadNewsHits(storyIdList: List<String>): List<HitEntity>
+    @Query("SELECT * FROM hits WHERE story_url NOT IN (:storyUrlList)")
+    suspend fun fetchUnreadNewsHits(storyUrlList: List<String>): List<HitEntity>
 }

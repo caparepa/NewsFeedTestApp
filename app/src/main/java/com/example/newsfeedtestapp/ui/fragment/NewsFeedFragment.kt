@@ -117,7 +117,7 @@ class NewsFeedFragment : BaseFragment(), KoinComponent {
             }
         })
         itemDeleted.observe(viewLifecycleOwner, Observer {
-            requireActivity().toastLong(it)
+
         })
         onError.observe(viewLifecycleOwner, Observer {
             //TODO: show toast with error!
