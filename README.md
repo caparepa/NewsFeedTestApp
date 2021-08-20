@@ -49,4 +49,4 @@ The package structure is the following, explained in a short, concise way:
 
 ### License
 
-The license is GPLv3, because I don't know any other that's as nice... maybe the [CC by-nc-sa](https://creativecommons.org/licenses/by-nc-sa/4.0/)? ¯\_(ツ)_/¯
+The license is GPLv3, because I don't know any other that's as nice... maybe the [CC by-nc-sa](https://creativecommons.org/licenses/by-nc-sa/4.0/)? ¯\\_(ツ)_/¯
